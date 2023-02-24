@@ -1,9 +1,9 @@
 ﻿using System.Collections.Immutable;
 using System.Net.Http.Json;
 using Newtonsoft.Json;
-using SteamAchievementAnalytics.Steam.DataObjects;
+using Sadet.Steam.DataObjects;
 
-namespace SteamAchievementAnalytics;
+namespace Sadet;
 // check input params
 
 internal static class Program
@@ -323,6 +323,7 @@ internal static class Program
 Datasets:
 
 Print output with
+------------------------------
 c       Print total completion
 r       Print total game count
 y       Print completion

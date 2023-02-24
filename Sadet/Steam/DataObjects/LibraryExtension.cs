@@ -1,6 +1,6 @@
 using System.Collections.Immutable;
 
-namespace SteamAchievementAnalytics.Steam.DataObjects;
+namespace Sadet.Steam.DataObjects;
 
 public static class LibraryExtension
 {

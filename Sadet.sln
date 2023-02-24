@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamAchievementAnalytics", "SteamAchievementAnalytics\SteamAchievementAnalytics.csproj", "{77FEEBF1-8D1D-4843-99A6-05E6B5A55B4D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sadet", "Sadet\Sadet.csproj", "{77FEEBF1-8D1D-4843-99A6-05E6B5A55B4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

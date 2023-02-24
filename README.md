@@ -1,11 +1,12 @@
 ﻿# About
+Steam Achievement Data Extraction Tool  
 This tool is suppose to help with choosing the easiest game to complete to bump the average game completion. 
 # Important
 This tool is only able to read the games you have from the steam api. 
 If you're profile is private the api does not return any games.  
-If you have returned a game, the api will not return that game.    
+If you have returned a game you bought, the api will not return that game.    
 But steam will still track that game as started.  
-Therefor the calculated Completion % will be of.  
+Therefor the calculated Completion % will be of.
 ```
 Args
 -----
@@ -19,6 +20,7 @@ Args
 Datasets:
 
 Print output with
+------------------------------
 c       Print total completion
 r       Print total game count
 y       Print completion
@@ -39,7 +41,7 @@ Examples:
 -lf cache.json -ds auix                     This will print out a all games and there difficulty to 100% sorted by the difficulty.
 ```
 # Adding other games to the calculation
-If you want to manually add games to the calculation, create a extra file with the following content:
+If you want to manually add games to the calculation, create an extra file with the following content:
 ```json
 [
   {
@@ -58,5 +60,3 @@ If you want to manually add games to the calculation, create a extra file with t
 ```
 You can add as many games as you want.
 Use `--load-external` to load this type of file!
-# Also
-The project name was probl. poorly chosen.

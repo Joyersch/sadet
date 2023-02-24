@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Dynamic;
 
-namespace SteamAchievementAnalytics
+namespace Sadet
 {
     public static class Global
     {

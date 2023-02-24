@@ -1,4 +1,4 @@
-﻿namespace SteamAchievementAnalytics.Steam.API.achievements.userAchievements;
+﻿namespace Sadet.Steam.API.achievements.userAchievements;
 
 public class Playerstats
 {

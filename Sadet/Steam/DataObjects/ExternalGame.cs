@@ -1,4 +1,4 @@
-namespace SteamAchievementAnalytics.Steam.DataObjects;
+namespace Sadet.Steam.DataObjects;
 
 public class ExternalGame
 {

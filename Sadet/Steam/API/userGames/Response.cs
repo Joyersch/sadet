@@ -1,4 +1,4 @@
-﻿namespace SteamAchievementAnalytics.Steam.API.userGames;
+﻿namespace Sadet.Steam.API.userGames;
 
 public class Response
 {
