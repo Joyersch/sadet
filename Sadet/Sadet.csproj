@@ -6,7 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>10</LangVersion>
-        <RootNamespace>SteamAchievementAnalytics</RootNamespace>
+        <RootNamespace>Sadet</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
