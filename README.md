@@ -1,5 +1,4 @@
 ﻿# About
-Steam Achievement Data Extraction Tool  
 This tool is suppose to help with choosing the easiest game to complete to bump the average game completion. 
 # Important
 This tool is only able to read the games you have from the steam api.  
