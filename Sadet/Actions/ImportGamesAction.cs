@@ -5,11 +5,10 @@ namespace Sadet.Actions;
 
 public class ImportGamesAction : IAction
 {
-    private string _filePath;
     private Library _library;
+    private string _filePath;
 
-
-    public ImportGamesAction(string filePath, Library library)
+    public ImportGamesAction(Library library, string filePath)
     {
         _filePath = filePath;
         _library = library;
