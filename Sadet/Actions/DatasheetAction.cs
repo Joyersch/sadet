@@ -22,7 +22,7 @@ public class DatasheetAction : IAction
             switch (param)
             {
                 case Parameter.PrintTotalCompletion:
-                    Console.WriteLine($"AverageCompletion={_library.Games.TotalCompletion()}");
+                    _log.WriteLine("AverageCompletion={0}",_library.Games.TotalCompletion());
                     break;
                 case Parameter.FilterOnlyUnfished:
                     _library.Games.Unfinished();

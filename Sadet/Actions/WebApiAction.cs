@@ -36,7 +36,7 @@ public class WebApiAction : IAction
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Something went wrong accessing the api!\n{0}", ex);
+            _log.WriteLine("Something went wrong accessing the api!\n{0}", ex);
             return;
         }
 
