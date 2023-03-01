@@ -4,42 +4,39 @@ namespace Sadet.Steam.DataObjects;
 
 public static class LibraryExtension
 {
-    public static List<string> GetNames(this List<Game> games)
-        => games.ConvertAll<string>(g => g.Name);
-
-    public static IEnumerable<Game> Started(this IEnumerable<Game> games)
-        => games.Where(g => g.Completion > 0F);
-
-    public static IEnumerable<Game> Unfinished(this IEnumerable<Game> games)
-        => games.Where(g => g.Completion < 100F);
-
-    public static IEnumerable<Game> SortedByCompletion(this IEnumerable<Game> game, bool asc)
+    public static List<Game> Started(this List<Game> games)
     {
-        var copy = new Game[game.Count()];
-        game.ToList().CopyTo(copy);
-        var list = copy.ToList();
-        list.Sort((g1, g2) =>
+        games.RemoveAll(g => g.Completion == 0F);
+        return games;
+    }
+
+    public static List<Game> Unfinished(this List<Game> games)
+    {
+        games.RemoveAll(g => g.Completion == 100F);
+        return games;
+    }
+
+    public static List<Game> SortedByCompletion(this List<Game> game, bool asc)
+    {
+        game.Sort((g1, g2) =>
         {
             if (g1.Completion < g2.Completion) return asc ? -1 : 1;
             if (g1.Completion > g2.Completion) return asc ? 1 : -1;
             return 0;
         });
-        return list.ToImmutableArray();
+        return game;
     }
 
-    public static IEnumerable<Game> SortedByDifficulty(this IEnumerable<Game> game, bool asc)
+    public static List<Game> SortedByDifficulty(this List<Game> game, bool asc)
     {
-        var copy = new Game[game.Count()];
-        game.ToList().CopyTo(copy);
-        var list = copy.ToList();
-        list.Sort((g1, g2) =>
+        game.Sort((g1, g2) =>
         {
             if (g1.Difficulty < g2.Difficulty) return asc ? -1 : 1;
             if (g1.Difficulty > g2.Difficulty) return asc ? 1 : -1;
             return 0;
         });
-        return list;
+        return game;
     }
-    public static float? TotalCompletion(this IEnumerable<Game> games)
+    public static float? TotalCompletion(this List<Game> games)
         => games.Where(g => g.Completion is not null && g.Completion != 0F).Average(g => g.Completion ?? 0);
 }
