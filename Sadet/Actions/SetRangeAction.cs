@@ -18,6 +18,6 @@ public class SetRangeAction : IAction
         if (_min >= 0)
             _formatSettings.ChangeMinimum(_min);
         if (_max >= 0)
-            _formatSettings.ChangeMinimum(_max);
+            _formatSettings.ChangeMaximum(_max);
     }
 }

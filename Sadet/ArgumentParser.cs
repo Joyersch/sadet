@@ -79,13 +79,13 @@ public class ArgumentParser
                     break;
                 case "f":
                 case "-format":
-                    if (args.Length - i < 2)
+                    if (args.Length - i < 1)
                     {
                         _log.WriteLine("missing parameters after {0}", args[i]);
                         return new List<IAction>();
                     }
 
-                    i += 2; // moved argument pointer 2 ahead since it expects 2 params for this function
+                    i += 1; // moved argument pointer 1 ahead since it expects 1 params for this function
 
                     actions.Add(new SetFormatAction(_formatSettings, args[cache + 1]));
                     break;
