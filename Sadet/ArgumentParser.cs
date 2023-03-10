@@ -116,7 +116,7 @@ public class ArgumentParser
                 case "pca":
                 case "-print-completion-average":
 
-                    actions.Add(new PrintCompletionAction(_log, _library, _formatSettings));
+                    actions.Add(new PrintAverageCompletionAction(_log, _library, _formatSettings));
                     break;
                 case "fou":
                 case "-filter-only-unfinished":

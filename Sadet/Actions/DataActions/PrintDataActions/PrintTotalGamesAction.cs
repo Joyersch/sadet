@@ -12,7 +12,7 @@ public class PrintTotalGamesAction : PrintDataAction
     {
         _log.WriteLine(
             _formatSettings.Format is null
-                ? "AverageCompletion={0}"
+                ? "TotalGames={0}"
                 : _formatSettings.Format
             , _library.Games.Count);
     }

@@ -12,7 +12,7 @@ public class PrintTotalAchievementsAction : PrintDataAction
     {
         _log.WriteLine(
             _formatSettings.Format is null
-                ? "AverageCompletion={0}"
+                ? "TotalAchievements={0}"
                 : _formatSettings.Format
             , _library.Games.Sum(g => g.Achievements.Count(a => a.Achieved)));
     }
