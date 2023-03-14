@@ -19,7 +19,8 @@ public class PrintDifficultyAction : PrintDataAction
                         ? "{1}={0}"
                         : _formatSettings.Format
                     , g.Difficulty
-                    , g.Name);
+                    , g.Name
+                    , g.Id);
             });
     }
 }
