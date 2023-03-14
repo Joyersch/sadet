@@ -19,7 +19,8 @@ public class PrintCompletionAction : PrintDataAction
                         ? "{1}={0}"
                         : _formatSettings.Format
                     , g.Completion
-                    , g.Name);
+                    , g.Name
+                    , g.Id);
             });
     
     }

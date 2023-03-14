@@ -14,7 +14,7 @@ Args
 -lf --load-file     [file]              Loads user game data from a given file
 -le --load-external [file]              Loads external file to add to the library. This is for unlisted games
 -d --dump           [file]              Dumps the user game data to a file (for -lf)                 
--f --format         [format]            Set a format for output. default is {1}={0}
+-f --format         [format]            Set a format for output. {0} = value | {1} = name {2} = id
 -r --range          [min] [max]         Set a min and max for output. default for both is -1
 
 Change Data:
