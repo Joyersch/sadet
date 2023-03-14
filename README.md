@@ -9,13 +9,15 @@ Therefor the calculated Completion % will be of.
 ```
 Args
 -----
--h --help                               Displays this info
--la --load-api      [apikey] [userid]   Loads user game data with the achievements from the api
--lf --load-file     [file]              Loads user game data from a given file
--le --load-external [file]              Loads external file to add to the library. This is for unlisted games
--d --dump           [file]              Dumps the user game data to a file (for -lf)                 
--f --format         [format]            Set a format for output. {0} = value | {1} = name {2} = id
--r --range          [min] [max]         Set a min and max for output. default for both is -1
+-h --help                                   Displays this info
+-ac --api-connection    [apikey] [userid]   Add an api connection (required for api actions)
+-lf --load-file         [file]              Loads user game data from a given file
+-le --load-external     [file]              Loads external file to add to the library. This is for unlisted games
+-lag --load-api-games                       Loads user game data with the achievements from the api
+-lfg --load-file-games  [file]              Loads game id's from a file and queries the data for each games from the api and adds said data
+-d --dump               [file]              Dumps the user game data to a file (for -lf)                 
+-f --format             [format]            Set a format for output. default is {1}={0}
+-r --range              [min] [max]         Set a min and max for output. default for both is -1
 
 Change Data:
 -----------
