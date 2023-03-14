@@ -10,6 +10,7 @@ public class ArgumentParser
     private readonly TextWriter _log;
     private readonly Library _library;
     private readonly FormatSettings _formatSettings;
+    private WebApiConnection _webApiConnection;
 
     public ArgumentParser(TextWriter log, Library library)
     {
@@ -35,8 +36,8 @@ public class ArgumentParser
                 case "-help":
                     actions.Add(new HelpAction(_log));
                     break;
-                case "la":
-                case "-load-api":
+                case "ac":
+                case "-api-connection":
                     if (args.Length - i < 3)
                     {
                         _log.WriteLine("missing parameters after {0}", args[i]);
@@ -45,7 +46,8 @@ public class ArgumentParser
 
                     i += 2; // moved argument pointer 2 ahead since it expects 2 params for this function
 
-                    actions.Add(new WebApiAction(_log, _library, args[cache + 1], args[cache + 2]));
+                    _webApiConnection = new WebApiConnection(args[cache + 1], args[cache + 2]);
+                    
                     break;
                 case "lf":
                 case "-load-file":
@@ -104,13 +106,13 @@ public class ArgumentParser
                         _log.WriteLine("Argument for minimum \"{0}\" is not a number!", args[cache + 1]);
                         return new List<IAction>();
                     }
-                    
+
                     if (!int.TryParse(args[cache + 2], out int max))
                     {
                         _log.WriteLine("Argument for maximum \"{0}\" is not a number!", args[cache + 2]);
                         return new List<IAction>();
                     }
-                    
+
                     actions.Add(new SetRangeAction(_formatSettings, min, max));
                     break;
                 case "pca":
@@ -193,6 +195,34 @@ public class ArgumentParser
                     }
 
                     actions.Add(new SortGamesAction(_library, completion, asc));
+                    break;
+                case "lag":
+                case "-load-api-games":
+                    if (_webApiConnection is null)
+                    {
+                        _log.WriteLine("Parameter args[i] required an api connection to be provided");
+                        return new List<IAction>();
+                    }
+                    
+                    actions.Add(new AllGamesFromProfileApiAction(_log, _library, _webApiConnection));
+                    break;
+                case "lfg":
+                case "-load-file-games":
+                    if (_webApiConnection is null)
+                    {
+                        _log.WriteLine("Parameter args[i] required an api connection to be provided");
+                        return new List<IAction>();
+                    }
+
+                    if (args.Length - i < 1)
+                    {
+                        _log.WriteLine("missing parameters after {0}", args[i]);
+                        return new List<IAction>();
+                    }
+
+                    i += 1; // moved argument pointer 1 ahead since it expects 1 params for this function
+
+                    actions.Add(new AllGamesFromFileApiAction(_log, _library, _webApiConnection, args[cache + 1]));
                     break;
                 default:
                     _log.WriteLine("Unrecognized argument: {0}", args[i]);

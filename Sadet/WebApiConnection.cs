@@ -2,45 +2,17 @@ using System.Net.Http.Json;
 using Newtonsoft.Json;
 using Sadet.Steam.DataObjects;
 
-namespace Sadet.Actions;
+namespace Sadet;
 
-public class WebApiAction : IAction
+public class WebApiConnection
 {
-    private readonly TextWriter _log;
-    private readonly Library _library;
     private readonly string _key;
     private readonly string _userId;
 
-    public WebApiAction(TextWriter log, Library library, string key, string userId)
+    public WebApiConnection(string key, string userId)
     {
-        _log = log;
-        _library = library;
         _key = key;
         _userId = userId;
-    }
-
-    public async Task ExecuteAsync()
-    {
-        Library newLibary = new Library();
-        try
-        {
-            newLibary = await GetFromApi(_key, _userId);
-            if (newLibary is null)
-            {
-                await _log.WriteLineAsync("Api return invalid values!");
-                return;
-            }
-
-            if (newLibary.Games.Count == 0)
-                await _log.WriteLineAsync("This steam user might have no games!");
-        }
-        catch (Exception ex)
-        {
-            _log.WriteLine("Something went wrong accessing the api!\n{0}", ex);
-            return;
-        }
-
-        _library.Games = newLibary.Games;
     }
 
     /// <summary>
@@ -49,13 +21,13 @@ public class WebApiAction : IAction
     /// <param name="key">steam api key</param>
     /// <param name="userId">steam user id</param>
     /// <returns>Steam Game data. Can be null</returns>
-    private static async Task<Library> GetFromApi(string key, string userId)
+    public async Task<Library> GetFromApi()
     {
         HttpClient client = new();
 
         #region Games
 
-        string userGamesUrl = Global.SteamAPI.GetUserGamesUrl(key, userId);
+        string userGamesUrl = Global.SteamAPI.GetUserGamesUrl(_key, _userId);
 
         // Send request to the api for all games
         var userGamesResponse = await client.SendAsync(Global.Http.Get(userGamesUrl));
@@ -79,7 +51,7 @@ public class WebApiAction : IAction
         for (var index = 0; index < userGamesObject.response.games.Length; index++)
         {
             var apiGame = userGamesObject.response.games[index];
-            var gameAsync = GetGameAsync(client, apiGame.appid, key, userId);
+            var gameAsync = GetGameAsync(client, apiGame.appid);
             if (gameAsync is null)
                 return null;
             games.Add(gameAsync);
@@ -98,12 +70,12 @@ public class WebApiAction : IAction
         return library;
     }
 
-    private static async Task<Game> GetGameAsync(HttpClient client, int appId, string apikey, string userId)
+    public async Task<Game> GetGameAsync(HttpClient client, int appId)
     {
         Game game = new Game();
         game.Id = appId;
 
-        string achievementUrl = Global.SteamAPI.GetGameAchievementUrl(apikey, userId, appId.ToString());
+        string achievementUrl = Global.SteamAPI.GetGameAchievementUrl(_key, _userId, appId.ToString());
 
         // Send request for all achievements of a given game
         var gameAchievementResponse = await client.SendAsync(Global.Http.Get(achievementUrl));
