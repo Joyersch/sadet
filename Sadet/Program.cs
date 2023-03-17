@@ -14,4 +14,7 @@ IHost host = Host.CreateDefaultBuilder(args)
     .Build();
 
 var app = host.Services.GetRequiredService<ArgumentParser>();
-await app.ParseAsync(args);
+var actions = await app.ParseAsync(args);
+
+foreach (var action in actions)
+    await action.ExecuteAsync();
