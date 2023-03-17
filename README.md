@@ -57,3 +57,42 @@ If you want to manually add games to the calculation, create an extra file with 
 ```
 You can add as many games as you want.
 Use `--load-external` to load this type of file!
+# Loading games from the api that are not listed on the user profile
+If you want to manually load games from the api create an extra file with the following content:
+```json
+[
+  1205550,
+  1625450
+]
+```
+Use `--load-api-games` to load this type of file!
+
+# Example
+This example shows how to use some of the arguments.
+## Input:
+```
+sadet
+    --api-connection [STEAM_API_KEY] 76561198350892105
+    --load-api-games
+    --filter-only-unfinished
+    --filter-only-started
+    --sort completion ascending
+    --format {1}={0:F2}
+    --range -1 10
+    --print-completion
+```
+## Output:
+Dated to [2023-03-14].
+```
+Team Fortress 2=1.15
+Turmoil=16.13
+PUBG: BATTLEGROUNDS=29.73
+Caveblazers=33.33
+Trouble In The Manor=33.33
+Despotism 3k=43.33
+South Park™: The Stick of Truth™=52.00
+Rust=55.56
+The Binding of Isaac: Rebirth=63.27
+Garry's Mod=68.97
+
+```
