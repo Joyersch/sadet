@@ -1,4 +1,5 @@
 using Sadet.Actions;
+using Sadet.Actions.DataActions;
 using Sadet.Actions.DataActions.ChangeDataActions;
 using Sadet.Actions.DataActions.PrintDataActions;
 using Sadet.Steam.DataObjects;
@@ -47,7 +48,7 @@ public class ArgumentParser
                     i += 2; // moved argument pointer 2 ahead since it expects 2 params for this function
 
                     _webApiConnection = new WebApiConnection(args[cache + 1], args[cache + 2]);
-                    
+
                     break;
                 case "lf":
                 case "-load-file":
@@ -200,17 +201,17 @@ public class ArgumentParser
                 case "-load-api-games":
                     if (_webApiConnection is null)
                     {
-                        _log.WriteLine("Parameter args[i] required an api connection to be provided");
+                        _log.WriteLine($"Parameter {args[i]} required an api connection to be provided");
                         return new List<IAction>();
                     }
-                    
+
                     actions.Add(new AllGamesFromProfileApiAction(_log, _library, _webApiConnection));
                     break;
                 case "lfg":
                 case "-load-file-games":
                     if (_webApiConnection is null)
                     {
-                        _log.WriteLine("Parameter args[i] required an api connection to be provided");
+                        _log.WriteLine($"Parameter {args[i]} required an api connection to be provided");
                         return new List<IAction>();
                     }
 
@@ -223,6 +224,24 @@ public class ArgumentParser
                     i += 1; // moved argument pointer 1 ahead since it expects 1 params for this function
 
                     actions.Add(new AllGamesFromFileApiAction(_log, _library, _webApiConnection, args[cache + 1]));
+                    break;
+                case "ar":
+                case "-api-retries":
+                    if (_webApiConnection is null)
+                    {
+                        _log.WriteLine($"Parameter {args[i]} required an api connection to be provided");
+                        return new List<IAction>();
+                    }
+
+                    if (args.Length - i < 1)
+                    {
+                        _log.WriteLine("missing parameters after {0}", args[i]);
+                        return new List<IAction>();
+                    }
+
+                    i += 1; // moved argument pointer 1 ahead since it expects 1 params for this function
+
+                    actions.Add(new SetRetryAction(_webApiConnection, args[cache + 1]));
                     break;
                 default:
                     _log.WriteLine("Unrecognized argument: {0}", args[i]);

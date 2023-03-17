@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Http.Json;
 using Newtonsoft.Json;
 using Sadet.Steam.DataObjects;
@@ -9,11 +10,20 @@ public class WebApiConnection
     private readonly string _key;
     private readonly string _userId;
 
+    private uint _retries;
+
     public WebApiConnection(string key, string userId)
     {
         _key = key;
         _userId = userId;
+        SetDefaultRetries();
     }
+
+    public void SetRetries(uint tries)
+        => _retries = tries;
+
+    public void SetDefaultRetries()
+        => _retries = 10;
 
     /// <summary>
     /// pull data from the steam api
@@ -30,10 +40,18 @@ public class WebApiConnection
         string userGamesUrl = Global.SteamAPI.GetUserGamesUrl(_key, _userId);
 
         // Send request to the api for all games
-        var userGamesResponse = await client.SendAsync(Global.Http.Get(userGamesUrl));
+        HttpResponseMessage userGamesResponse;
+
+        int tries = 0;
+        do
+        {
+            userGamesResponse = await client.SendAsync(Global.Http.Get(userGamesUrl));
+            tries++;
+        } while (userGamesResponse.StatusCode == HttpStatusCode.InternalServerError && tries <= _retries);
 
         if (!userGamesResponse.IsSuccessStatusCode)
             return null;
+
         // Response Object
         var userGamesObject = JsonConvert
                                   .DeserializeObject<Steam.API.userGames.UserGames>(await userGamesResponse
@@ -78,7 +96,14 @@ public class WebApiConnection
         string achievementUrl = Global.SteamAPI.GetGameAchievementUrl(_key, _userId, appId.ToString());
 
         // Send request for all achievements of a given game
-        var gameAchievementResponse = await client.SendAsync(Global.Http.Get(achievementUrl));
+        HttpResponseMessage gameAchievementResponse;
+
+        int tries = 0;
+        do
+        {
+            gameAchievementResponse = await client.SendAsync(Global.Http.Get(achievementUrl));
+            tries++;
+        } while (gameAchievementResponse.StatusCode == HttpStatusCode.InternalServerError && tries <= _retries);
 
         if (!gameAchievementResponse.IsSuccessStatusCode)
             return null;
@@ -99,7 +124,15 @@ public class WebApiConnection
         #region Achievements
 
         string globalAchievementUrl = Global.SteamAPI.GetgameGlobalAchievementsUrl(appId.ToString());
-        var globalAchievementResponse = await client.SendAsync(Global.Http.Get(globalAchievementUrl));
+        HttpResponseMessage globalAchievementResponse;
+
+        tries = 0;
+
+        do
+        {
+            globalAchievementResponse = await client.SendAsync(Global.Http.Get(globalAchievementUrl));
+            tries++;
+        } while (globalAchievementResponse.StatusCode == HttpStatusCode.InternalServerError && tries <= _retries);
 
         if (!globalAchievementResponse.IsSuccessStatusCode)
             return null;

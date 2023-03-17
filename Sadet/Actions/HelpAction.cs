@@ -14,6 +14,7 @@ public class HelpAction : IAction
 -----
 -h --help                                   Displays this info
 -ac --api-connection    [apikey] [userid]   Add an api connection (required for api actions)
+-ar --api-retries       [number]            Set amount of retries for api calls if they run into Internal Server Errors. Default value is 10 
 -lf --load-file         [file]              Loads user game data from a given file
 -le --load-external     [file]              Loads external file to add to the library. This is for unlisted games
 -lag --load-api-games                       Loads user game data with the achievements from the api
