@@ -7,7 +7,7 @@ public class SetRetryAction : IAction
     
     public SetRetryAction(WebApiConnection connection, string input)
     {
-       _connection = this._connection;
+       _connection = connection;
        _input = input;
     }
     public async Task ExecuteAsync()
