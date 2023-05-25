@@ -152,8 +152,9 @@ public class WebApiConnection
             Achievement achievement = new()
             {
                 Achieved = apiAchievement.achieved == 1,
+                // First can fail here if a game is really new or recently got achievements which therefor there will be no global statistics
                 Percent = globalAchievementsObject.achievementpercentages.achievements
-                    .First(a => a.name == achievement1.apiname).percent,
+                    .FirstOrDefault(a => a.name == achievement1.apiname, new() {percent = 0}).percent,
                 Name = apiAchievement.apiname
             };
 
