@@ -37,8 +37,20 @@ public class Game
         }
     }
 
+    public float? _maxSingleDifficulty;
+
+    public float? MaxSingleDifficulty
+    {
+        get
+        {
+            if (Achievements.Count != 0)
+                _difficulty ??= CalculateMaxSingleDifficulty();
+            return _difficulty;
+        }
+    }
+
     private float CalculateCompletion()
-        => (float)Achievements.Average(a => a.Achieved ? 100M: 0);
+        => (float)Achievements.Average(a => a.Achieved ? 100M : 0);
 
     private float CalculateDifficulty()
     {
@@ -47,4 +59,9 @@ public class Game
             return 100F;
         return notAchieved.Average(a => a.Percent);
     }
+
+    private float CalculateMaxSingleDifficulty()
+        => Achievements.Where(g => !g.Achieved)
+            .ToList()
+            .Max(g => g.Percent);
 }

@@ -4,8 +4,11 @@ namespace Sadet.Actions.DataActions.PrintDataActions;
 
 public class PrintDifficultyAction : PrintDataAction
 {
-    public PrintDifficultyAction(TextWriter log, Library library, FormatSettings formatSettings) : base(log, library, formatSettings)
+    private readonly DifficultySettings _difficultySettings;
+
+    public PrintDifficultyAction(TextWriter log, Library library, FormatSettings formatSettings, DifficultySettings difficultySettings) : base(log, library, formatSettings)
     {
+        _difficultySettings = difficultySettings;
     }
     
     public override async Task ExecuteAsync()
@@ -18,7 +21,7 @@ public class PrintDifficultyAction : PrintDataAction
                     _formatSettings.Format is null
                         ? "{1}={0}"
                         : _formatSettings.Format
-                    , g.Difficulty
+                    , _difficultySettings.ShowSingleTargetDifficulty ? g.MaxSingleDifficulty : g.Difficulty
                     , g.Name
                     , g.Id);
             });

@@ -11,6 +11,7 @@ public class ArgumentParser
     private readonly TextWriter _log;
     private readonly Library _library;
     private readonly FormatSettings _formatSettings;
+    private readonly DifficultySettings _difficultySettings;
     private WebApiConnection _webApiConnection;
 
     public ArgumentParser(TextWriter log, Library library)
@@ -18,6 +19,7 @@ public class ArgumentParser
         _log = log;
         _library = library;
         _formatSettings = new FormatSettings();
+        _difficultySettings = new DifficultySettings();
     }
 
     public async Task<List<IAction>> ParseAsync(string[] args)
@@ -139,7 +141,7 @@ public class ArgumentParser
                 case "pd":
                 case "-print-difficulty":
 
-                    actions.Add(new PrintDifficultyAction(_log, _library, _formatSettings));
+                    actions.Add(new PrintDifficultyAction(_log, _library, _formatSettings, _difficultySettings));
                     break;
                 case "ptg":
                 case "-print-total-games":
@@ -242,6 +244,10 @@ public class ArgumentParser
                     i += 1; // moved argument pointer 1 ahead since it expects 1 params for this function
 
                     actions.Add(new SetRetryAction(_webApiConnection, args[cache + 1]));
+                    break;
+                case "std":
+                case "-single-target-difficulty":
+                    _difficultySettings.ShowSingleTargetDifficulty = true;
                     break;
                 default:
                     _log.WriteLine("Unrecognized argument: {0}", args[i]);
