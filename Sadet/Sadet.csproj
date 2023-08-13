@@ -7,7 +7,7 @@
         <Nullable>enable</Nullable>
         <LangVersion>10</LangVersion>
         <RootNamespace>Sadet</RootNamespace>
-        <Version>0.1.0</Version>
+        <Version>0.1.1</Version>
         <Title>Steam Achievement Data Extraction Tool</Title>
         <Authors>Erik Schnittker</Authors>
         <AssemblyVersion>1.0.1</AssemblyVersion>
