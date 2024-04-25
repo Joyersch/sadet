@@ -23,6 +23,7 @@ public class HelpAction : IAction
 -d --dump                       [file]              Dumps the user game data to a file (for -lf)                 
 -f --format                     [format]            Set a format for output. {0} = value | {1} = name {2} = id
 -r --range                      [min] [max]         Set a min and max for output. default for both is -1
+-nd --no-difficulty                                 When pulling the games from tha api, the diffulty is not pulled saving precious requests
 
 Change Data:
 -----------

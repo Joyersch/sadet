@@ -12,6 +12,7 @@ public class ArgumentParser
     private readonly Library _library;
     private readonly FormatSettings _formatSettings;
     private readonly DifficultySettings _difficultySettings;
+    private readonly ApiOptions _apiOptions;
     private WebApiConnection _webApiConnection;
 
     public ArgumentParser(TextWriter log, Library library)
@@ -20,6 +21,7 @@ public class ArgumentParser
         _library = library;
         _formatSettings = new FormatSettings();
         _difficultySettings = new DifficultySettings();
+        _apiOptions = new ApiOptions();
     }
 
     public async Task<List<IAction>> ParseAsync(string[] args)
@@ -207,7 +209,7 @@ public class ArgumentParser
                         return new List<IAction>();
                     }
 
-                    actions.Add(new AllGamesFromProfileApiAction(_log, _library, _webApiConnection));
+                    actions.Add(new AllGamesFromProfileApiAction(_log, _library, _webApiConnection, _apiOptions));
                     break;
                 case "lfg":
                 case "-load-file-games":
@@ -225,7 +227,7 @@ public class ArgumentParser
 
                     i += 1; // moved argument pointer 1 ahead since it expects 1 params for this function
 
-                    actions.Add(new AllGamesFromFileApiAction(_log, _library, _webApiConnection, args[cache + 1]));
+                    actions.Add(new AllGamesFromFileApiAction(_log, _library, _webApiConnection, args[cache + 1], _apiOptions));
                     break;
                 case "ar":
                 case "-api-retries":
@@ -248,6 +250,10 @@ public class ArgumentParser
                 case "std":
                 case "-single-target-difficulty":
                     _difficultySettings.ShowSingleTargetDifficulty = true;
+                    break;
+                case "nd":
+                case "-no-difficulty":
+                    _apiOptions.OnlyAchievements = true;
                     break;
                 default:
                     _log.WriteLine("Unrecognized argument: {0}", args[i]);

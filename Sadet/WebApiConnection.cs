@@ -1,7 +1,9 @@
 using System.Net;
 using System.Net.Http.Json;
 using Newtonsoft.Json;
+using Sadet.Steam.API.achievements.globalAchievements;
 using Sadet.Steam.DataObjects;
+using Achievement = Sadet.Steam.DataObjects.Achievement;
 
 namespace Sadet;
 
@@ -31,7 +33,7 @@ public class WebApiConnection
     /// <param name="key">steam api key</param>
     /// <param name="userId">steam user id</param>
     /// <returns>Steam Game data. Can be null</returns>
-    public async Task<Library> GetFromApi()
+    public async Task<Library> GetFromApi(ApiOptions _apiOptions)
     {
         HttpClient client = new();
 
@@ -69,7 +71,7 @@ public class WebApiConnection
         for (var index = 0; index < userGamesObject.response.games.Length; index++)
         {
             var apiGame = userGamesObject.response.games[index];
-            var gameAsync = GetGameAsync(client, apiGame.appid);
+            var gameAsync = GetGameAsync(client, apiGame.appid, _apiOptions.OnlyAchievements);
             if (gameAsync is null)
                 return null;
             games.Add(gameAsync);
@@ -88,7 +90,7 @@ public class WebApiConnection
         return library;
     }
 
-    public async Task<Game> GetGameAsync(HttpClient client, int appId)
+    public async Task<Game> GetGameAsync(HttpClient client, int appId, bool onlyAchievements)
     {
         Game game = new Game();
         game.Id = appId;
@@ -123,42 +125,56 @@ public class WebApiConnection
 
         #region Achievements
 
-        string globalAchievementUrl = Global.SteamAPI.GetgameGlobalAchievementsUrl(appId.ToString());
-        HttpResponseMessage globalAchievementResponse;
+        Achievements? globalAchievementsObject = null;
 
-        tries = 0;
-
-        do
+        if (!onlyAchievements)
         {
-            globalAchievementResponse = await client.SendAsync(Global.Http.Get(globalAchievementUrl));
-            tries++;
-        } while (globalAchievementResponse.StatusCode == HttpStatusCode.InternalServerError && tries <= _retries);
+            string globalAchievementUrl = Global.SteamAPI.GetgameGlobalAchievementsUrl(appId.ToString());
+            HttpResponseMessage globalAchievementResponse;
 
-        if (!globalAchievementResponse.IsSuccessStatusCode)
-            return null;
+            tries = 0;
 
-        // Send request for all completion rates of the achievements for a given game
-        var globalAchievementsObject = await globalAchievementResponse.Content
-            .ReadFromJsonAsync<Steam.API.achievements.globalAchievements.Achievements>();
+            do
+            {
+                globalAchievementResponse = await client.SendAsync(Global.Http.Get(globalAchievementUrl));
+                tries++;
+            } while (globalAchievementResponse.StatusCode == HttpStatusCode.InternalServerError && tries <= _retries);
+
+            if (!globalAchievementResponse.IsSuccessStatusCode)
+                return null;
+
+            // Send request for all completion rates of the achievements for a given game
+            globalAchievementsObject = await globalAchievementResponse.Content
+                .ReadFromJsonAsync<Steam.API.achievements.globalAchievements.Achievements>();
+
+
+        }
+
+        globalAchievementsObject ??= new Achievements()
+        {
+            achievementpercentages = new Percentages()
+            {
+                achievements = Array.Empty<Steam.API.achievements.globalAchievements.Achievement>()
+            }
+        };
 
         if (!gameAchievementObject.playerstats.success || gameAchievementObject.playerstats.achievements is null)
-            return null;
-
-
+            return game;
         // Write Achievements into the game object (for the library)
         foreach (var apiAchievement in gameAchievementObject.playerstats.achievements)
         {
-            var achievement1 = apiAchievement;
-            Achievement achievement = new()
+            var steamAchievement = apiAchievement;
+
+            Achievement libAchievement = new()
             {
                 Achieved = apiAchievement.achieved == 1,
                 // First can fail here if a game is really new or recently got achievements which therefor there will be no global statistics
                 Percent = globalAchievementsObject.achievementpercentages.achievements
-                    .FirstOrDefault(a => a.name == achievement1.apiname, new() {percent = 0}).percent,
+                    .FirstOrDefault(a => a.name == steamAchievement.apiname, new() { percent = 0 }).percent,
                 Name = apiAchievement.apiname
             };
 
-            game.Achievements.Add(achievement);
+            game.Achievements.Add(libAchievement);
         }
 
         #endregion
