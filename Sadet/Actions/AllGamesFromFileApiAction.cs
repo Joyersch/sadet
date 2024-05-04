@@ -27,6 +27,10 @@ public class AllGamesFromFileApiAction : IAction
         int[] games = JsonConvert.DeserializeObject<int[]>(await streamReader.ReadToEndAsync());
         var client = new HttpClient();
         foreach (var game in games)
-            _library.Games.Add(await _webApiConnection.GetGameAsync(client, game, _apiOptions.OnlyAchievements));
+        {
+            var value = await _webApiConnection.GetGameAsync(client, game, _apiOptions.OnlyAchievements);
+            if (value is not null)
+                _library.Games.Add(value);
+        }
     }
 }
